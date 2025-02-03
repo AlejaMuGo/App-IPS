@@ -7,7 +7,8 @@
 	import { Button } from '$lib/components/ui/button/index.js';
 	import DialogEditClient from '$lib/components/clients/DialogEditClient.svelte';
 
-	const storeClients = new ClientStore(clientes);
+	const { data } = $props();
+	const storeClients = new ClientStore(data.clientes);
 
 	function handleClientEdit(client: Client) {
 		console.log('Editado:');

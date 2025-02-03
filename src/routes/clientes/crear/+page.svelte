@@ -6,6 +6,8 @@
 	import { ClientStore } from '$lib/stores/clients.svelte';
 	import { Button } from '$lib/components/ui/button/index.js';
 	import { toast } from "svelte-sonner";
+	import { DatabaseController } from '$lib/services/db';
+	import { goto } from '$app/navigation';
 
 	let { data }: { data: PageData } = $props();
 	const storeClients = new ClientStore(clientes); // Estado global de clientes
@@ -19,17 +21,21 @@
 	});
 
 	// Función para agregar el nuevo cliente
-	function handleRegister() {
+	async function handleRegister() {
 		// Validar que los campos no estén vacíos
 		if (!newClient.nombre || !newClient.documento || !newClient.email || !newClient.telefono) {
 			toast.error("Todos los campos son obligatorios")
 			return;
 		}
 
-		// Agregar el cliente al estado global
-		storeClients.addClient({ ...newClient });
+		const databaseController = new DatabaseController();
+		const result = await databaseController.createClient(newClient);
+		
+		if (result === null) {
+			toast.error("Error al crear cliente")
+		}
 
-		toast.success("Creado con exito")
+		toast.success(`Cliente creado con exito: ${result?.nombre as string}`)
 
 		// Limpiar el formulario
 		newClient = {
@@ -38,6 +44,8 @@
 			email: '',
 			telefono: ''
 		};
+
+		await goto("/clientes")
 	}
 </script>
 

@@ -6,6 +6,11 @@ export class DatabaseController {
     async createClient(client: Client): Promise<Client | null> {
         const { data, error } = await supabase.from('client').insert([client]).select();
 
+        if (error !== null) {
+            console.log(error)
+            return null
+        }
+
         if (data === null || data.length === 0) {
             return null;
         }
