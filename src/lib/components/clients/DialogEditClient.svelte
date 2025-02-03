@@ -5,7 +5,7 @@
 	import type { Client } from '$lib/types/client';
 	import { Input } from '$lib/components/ui/input/index.js';
 	import { Button } from '$lib/components/ui/button/index.js';
-	import { toast } from "svelte-sonner";
+	import { toast } from 'svelte-sonner';
 	import { DatabaseController } from '$lib/services/db';
 
 	let myOpen = $state(false);
@@ -27,7 +27,7 @@
 <Dialog.Root bind:open={() => myOpen, (newOpen) => (myOpen = newOpen)}>
 	<Dialog.Trigger>
 		<Button
-			class="h-7 border-2 border-indigo-400 bg-white text-indigo-400  hover:scale-105 hover:border-indigo-500 hover:bg-indigo-500 hover:text-white "
+			class="bg- h-7 border-2 border-indigo-400 text-indigo-400  hover:scale-105 hover:border-indigo-500 hover:bg-indigo-500 hover:text-white "
 		>
 			<i class="bi bi-pencil-square"> </i>
 			<span>Editar</span>

@@ -6,7 +6,7 @@ export type Client = {
 	email: string;
 };
 
-export const clientes: Client[] = ([
+export const clientes: Client[] = [
 	{
 		id: 1,
 		nombre: 'María Alejandra Munoz',
@@ -28,4 +28,4 @@ export const clientes: Client[] = ([
 		telefono: '3153566745',
 		email: 'horusapestoso@gmail.com'
 	}
-]);
+];

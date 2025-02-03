@@ -3,13 +3,24 @@
 	import { Button } from '$lib/components/ui/button/index.js';
 </script>
 
-<div class="flex items-center justify-between bg-indigo-100 px-12 py-6">
-	<div class="flex items-center gap-6">
-		<h1>Sistema gestion</h1>
+<div class="flex items-center justify-between bg-indigo-100 px-12 py-3">
+	<div class="flex items-center gap-10">
+		<a href="/afrodita"
+			><div
+				class="flex items-center justify-between gap-2 transition duration-150 ease-in-out hover:-translate-y-1 hover:scale-105"
+			>
+				<img
+					src="src/lib/components/layout/images/logo afrodita.png"
+					alt=""
+					style="width: 35px; height: 35px"
+				/>
+				<h1 class="text-lg font-bold">Afrodita</h1>
+			</div>
+		</a>
 
-		<div class="flex items-center gap-2">
-			<Button href="/clientes" variant="secondary">Gestion clientes</Button>
-			<Button variant="secondary">Gestion profesionales</Button>
+		<div class="flex items-center gap-8">
+			<a href="/clientes" class="text-s hover:text-indigo-500">Gestión clientes</a>
+			<a href="/profesionales" class="text-s hover:text-indigo-500">Gestión profesionales</a>
 		</div>
 	</div>
 	<div>

@@ -36,6 +36,6 @@ export class ClientStore {
 	}
 	// Método para agregar un nuevo cliente
 	addClient(client: Client) {
-		this.clients.push(client);// Agregar cliente sin mutar el estado
+		this.clients.push(client); // Agregar cliente sin mutar el estado
 	}
 }

@@ -13,15 +13,16 @@
 	const storeClients = new ClientStore(data.clientes);
 
 	async function handleClientEdit(client: Client) {
-		
+		toast.loading('Actualizando cliente...');
+
 		const databaseController = new DatabaseController();
 		const updatedClient = await databaseController.updateClient(client.id as number, client);
 		if (updatedClient === null) {
-			toast.error("Error al actualizar cliente.")
+			toast.error('Error al actualizar cliente.');
 			return;
 		}
 
-		toast.success("Cliente actualizado con exito.")
+		toast.success('Cliente actualizado con exito.');
 
 		for (let i = 0; i < storeClients.clients.length; i++) {
 			if (storeClients.clients[i].id === updatedClient.id) {
@@ -34,7 +35,7 @@
 <main class="flex flex-col gap-12 px-12 py-12">
 	<div class="flex justify-between px-2">
 		<div class="space-y-4">
-			<h2 class="text-3xl font-bold">Gestion de clientes</h2>
+			<h2 class="text-3xl font-bold">Gestión de clientes</h2>
 			<div class="h-1.5 w-60 bg-indigo-500"></div>
 		</div>
 		<Button
@@ -46,11 +47,14 @@
 	</div>
 
 	<div class="space-y-4">
-		<Input
-			class="w-96"
-			bind:value={storeClients.searchValue}
-			placeholder="Busca por nombre, cedula o correo"
-		/>
+		<div>
+			<Input
+				class="w-96"
+				bind:value={storeClients.searchValue}
+				placeholder="Busca por nombre, cedula o correo"
+			/>
+		</div>
+
 		<div class="flex justify-between">
 			<Table.Root>
 				<Table.Caption>Listado de clientes</Table.Caption>

@@ -5,7 +5,7 @@
 	import { Input } from '$lib/components/ui/input/index.js';
 	import { ClientStore } from '$lib/stores/clients.svelte';
 	import { Button } from '$lib/components/ui/button/index.js';
-	import { toast } from "svelte-sonner";
+	import { toast } from 'svelte-sonner';
 	import { DatabaseController } from '$lib/services/db';
 	import { goto } from '$app/navigation';
 
@@ -24,18 +24,18 @@
 	async function handleRegister() {
 		// Validar que los campos no estén vacíos
 		if (!newClient.nombre || !newClient.documento || !newClient.email || !newClient.telefono) {
-			toast.error("Todos los campos son obligatorios")
+			toast.error('Todos los campos son obligatorios');
 			return;
 		}
 
 		const databaseController = new DatabaseController();
 		const result = await databaseController.createClient(newClient);
-		
+
 		if (result === null) {
-			toast.error("Error al crear cliente")
+			toast.error('Error al crear cliente');
 		}
 
-		toast.success(`Cliente creado con exito: ${result?.nombre as string}`)
+		toast.success(`Cliente creado con exito: ${result?.nombre as string}`);
 
 		// Limpiar el formulario
 		newClient = {
@@ -45,11 +45,14 @@
 			telefono: ''
 		};
 
-		await goto("/clientes")
+		await goto('/clientes');
 	}
 </script>
 
-<class class="mx-auto flex max-w-4xl flex-col gap-12 px-12 py-12">
+<a href="/clientes" class="justify-left flex gap-2 px-12 py-5 hover:text-indigo-600">
+	<i class="bi bi-arrow-left"></i>Volver</a
+>
+<class class="mx-auto flex max-w-4xl flex-col gap-12 px-12 py-2">
 	<div class="px-2">
 		<div class="space-y-4">
 			<h2 class="text-3xl font-bold">Registrar cliente</h2>
@@ -59,7 +62,6 @@
 	<div class="flex flex-col space-y-6 rounded-md border-2 px-4 py-6">
 		<div>
 			<h1 class="px-2 text-base font-bold">Datos cliente</h1>
-			{JSON.stringify(newClient)}
 		</div>
 
 		<!-- Inputs vinculados al estado local -->
@@ -82,7 +84,9 @@
 			</div>
 		</div>
 		<div>
-			<Button class="w-full bg-indigo-500 text-white" onclick={handleRegister}>Registrar</Button>
+			<Button class="w-full bg-indigo-500 text-white hover:bg-indigo-900" onclick={handleRegister}
+				>Registrar</Button
+			>
 		</div>
 	</div>
 </class>
