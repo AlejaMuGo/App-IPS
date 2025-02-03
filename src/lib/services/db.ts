@@ -23,4 +23,19 @@ export class DatabaseController {
         return clients as Client[];
     }
 
+    async updateClient(id: number, client: Partial<Client>): Promise<Client | null> {
+        const { data, error } = await supabase.from('client').update(client).eq("id", id).select();
+        
+        if (error !== null) {
+            console.log(error)
+            return null
+        }
+
+        if (data === null || data.length === 0) {
+            return null;
+        }
+
+        return data[0] as Client;
+    }
+
 }

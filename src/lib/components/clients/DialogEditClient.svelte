@@ -5,6 +5,8 @@
 	import type { Client } from '$lib/types/client';
 	import { Input } from '$lib/components/ui/input/index.js';
 	import { Button } from '$lib/components/ui/button/index.js';
+	import { toast } from "svelte-sonner";
+	import { DatabaseController } from '$lib/services/db';
 
 	let myOpen = $state(false);
 

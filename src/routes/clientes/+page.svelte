@@ -6,18 +6,26 @@
 	import { ClientStore } from '$lib/stores/clients.svelte';
 	import { Button } from '$lib/components/ui/button/index.js';
 	import DialogEditClient from '$lib/components/clients/DialogEditClient.svelte';
+	import { DatabaseController } from '$lib/services/db.js';
+	import { toast } from 'svelte-sonner';
 
 	const { data } = $props();
 	const storeClients = new ClientStore(data.clientes);
 
-	function handleClientEdit(client: Client) {
-		console.log('Editado:');
-		console.log(client);
+	async function handleClientEdit(client: Client) {
+		
+		const databaseController = new DatabaseController();
+		const updatedClient = await databaseController.updateClient(client.id as number, client);
+		if (updatedClient === null) {
+			toast.error("Error al actualizar cliente.")
+			return;
+		}
 
-		for (const c of storeClients.clients) {
-			const isMatch = c.documento === client.documento;
-			if (isMatch) {
-				c.nombre = client.nombre;
+		toast.success("Cliente actualizado con exito.")
+
+		for (let i = 0; i < storeClients.clients.length; i++) {
+			if (storeClients.clients[i].id === updatedClient.id) {
+				storeClients.clients[i] = updatedClient;
 			}
 		}
 	}
