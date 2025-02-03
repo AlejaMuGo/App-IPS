@@ -5,6 +5,7 @@
 	import { Input } from '$lib/components/ui/input/index.js';
 	import { ClientStore } from '$lib/stores/clients.svelte';
 	import { Button } from '$lib/components/ui/button/index.js';
+	import { toast } from "svelte-sonner";
 
 	let { data }: { data: PageData } = $props();
 	const storeClients = new ClientStore(clientes); // Estado global de clientes
@@ -21,12 +22,14 @@
 	function handleRegister() {
 		// Validar que los campos no estén vacíos
 		if (!newClient.nombre || !newClient.documento || !newClient.email || !newClient.telefono) {
-			alert('Todos los campos son obligatorios');
+			toast.error("Todos los campos son obligatorios")
 			return;
 		}
 
 		// Agregar el cliente al estado global
 		storeClients.addClient({ ...newClient });
+
+		toast.success("Creado con exito")
 
 		// Limpiar el formulario
 		newClient = {
