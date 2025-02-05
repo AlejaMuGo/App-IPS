@@ -10,8 +10,7 @@
 	import { goto } from '$app/navigation';
 
 	let { data }: { data: PageData } = $props();
-	const storeClients = new ClientStore(clientes); // Estado global de clientes
-
+	const storeClients = new ClientStore(clientes);
 	// Estado local del nuevo cliente
 	let newClient: Client = $state({
 		nombre: '',
@@ -67,7 +66,7 @@
 		<!-- Inputs vinculados al estado local -->
 		<div class="space-y-4 px-2">
 			<div class="space-y-2">
-				<h1>Nombre</h1>
+				<h1>Nombre completo</h1>
 				<Input class="w-full" placeholder="Nombre completo" bind:value={newClient.nombre} />
 			</div>
 			<div class="space-y-2">

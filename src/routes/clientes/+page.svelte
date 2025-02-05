@@ -60,7 +60,7 @@
 				<Table.Caption>Listado de clientes</Table.Caption>
 				<Table.Header>
 					<Table.Row>
-						<Table.Head>Nombre</Table.Head>
+						<Table.Head>Nombre completo</Table.Head>
 						<Table.Head>Documento</Table.Head>
 						<Table.Head>Email</Table.Head>
 						<Table.Head>Telefono</Table.Head>

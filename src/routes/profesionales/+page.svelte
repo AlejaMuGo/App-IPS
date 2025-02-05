@@ -1,12 +1,42 @@
 <script lang="ts">
-	import type { PageData } from './$types';
-	import { Button } from '$lib/components/ui/button/index.js';
-	import * as Table from '$lib/components/ui/table/index.js';
-	import { Input } from '$lib/components/ui/input/index.js';
 	import TableCell from '$lib/components/ui/table/table-cell.svelte';
-	import * as AlertDialog from "$lib/components/ui/alert-dialog/index.js";
+	import * as AlertDialog from '$lib/components/ui/alert-dialog/index.js';
+	import { Rol, type Profesional } from '$lib/types/profesional';
+	import { ProfesionalStore } from '$lib/stores/profesionales.svelte';
+	import { Input } from '$lib/components/ui/input/index.js';
+	import * as Table from '$lib/components/ui/table/index.js';
+	import { ClientStore } from '$lib/stores/clients.svelte';
+	import { Button } from '$lib/components/ui/button/index.js';
+	import DialogEditClient from '$lib/components/clients/DialogEditClient.svelte';
+	import { DatabaseController } from '$lib/services/db.js';
+	import { toast } from 'svelte-sonner';
+	import DialogEditProfesional from '$lib/components/profesionales/DialogEditProfesional.svelte';
 
-	let { data }: { data: PageData } = $props();
+	const { data } = $props();
+	const storeProfesional = new ProfesionalStore(data.profesionales);
+
+	async function handleProfesionalEdit(profesional: Profesional) {
+		toast.loading('Actualizando profesional...');
+
+		const databaseController = new DatabaseController();
+		const updatedProfesional = await databaseController.updateProfesional(
+			profesional.id as number,
+			profesional
+		);
+
+		if (updatedProfesional === null) {
+			toast.error('Error al actualizar profesional.');
+			return;
+		}
+
+		toast.success('Profesional actualizado con exito.');
+
+		for (let i = 0; i < storeProfesional.profesionales.length; i++) {
+			if (storeProfesional.profesionales[i].id === updatedProfesional.id) {
+				storeProfesional.profesionales[i] = updatedProfesional;
+			}
+		}
+	}
 </script>
 
 <main class="flex flex-col gap-12 px-12 py-12">
@@ -24,58 +54,75 @@
 	</div>
 	<div class="space-y-4">
 		<div>
-			<Input class="w-96" placeholder="Busca por nombre, cedula o correo" />
+			<Input
+				class="w-96"
+				placeholder="Busca por nombre, cedula o correo"
+				bind:value={storeProfesional.searchValue}
+			/>
 		</div>
 
 		<div class="flex">
 			<Table.Root>
-				<Table.Caption>Listado de clientes</Table.Caption>
+				<Table.Caption>Listado de profesionales</Table.Caption>
 				<Table.Header>
 					<Table.Row>
-						<Table.Head>Nombre</Table.Head>
+						<Table.Head>Nombre completo</Table.Head>
 						<Table.Head>Documento</Table.Head>
 						<Table.Head>Email</Table.Head>
 						<Table.Head>Telefono</Table.Head>
 						<Table.Head>Rol</Table.Head>
+						<Table.Head></Table.Head>
 					</Table.Row>
 				</Table.Header>
 				<Table.Body>
-					<Table.Row>
-						<Table.Cell class="font-medium">1</Table.Cell>
-						<Table.Cell>1</Table.Cell>
-						<Table.Cell>1</Table.Cell>
-						<Table.Cell>1</Table.Cell>
-						<Table.Cell>1</Table.Cell>
-						<TableCell>
-							<div class="flex space-x-2">
-								<div class="text-white hover:text-indigo-500">
-									<Button
-			class="bg- h-7 bg-indigo-200 text-indigo-500 hover:text-white hover:scale-105 border-2 border-indigo-500 hover:border-indigo-500 hover:bg-indigo-500"
-		>
-			<i class="bi bi-pencil-square"> </i>
-		</Button>
-								</div>
-								<div>
-									<AlertDialog.Root>
-										<AlertDialog.Trigger><Button class="bg- h-7 border-2 border-red-500 text-red-500 bg-red-100 hover:scale-105 hover:border-red-500 hover:bg-red-500 hover:text-white ">
-											<i class="bi bi-trash3"></i><span>Eliminar</span></Button></AlertDialog.Trigger>
-										<AlertDialog.Content>
-										  <AlertDialog.Header>
-											<AlertDialog.Title>¿Estás completamente seguro?</AlertDialog.Title>
-											<AlertDialog.Description>
-												Esta acción no se puede deshacer. Esto eliminará permanentemente el profesional de la base de datos.
-											</AlertDialog.Description>
-										  </AlertDialog.Header>
-										  <AlertDialog.Footer>
-											<AlertDialog.Cancel>Cancelar</AlertDialog.Cancel>
-											<AlertDialog.Action>Continuar</AlertDialog.Action>
-										  </AlertDialog.Footer>
-										</AlertDialog.Content>
-									</AlertDialog.Root>
-								</div>
-							</div>
-						</TableCell>
-					</Table.Row>
+					{#if storeProfesional.filtered.length === 0}
+						<span class="flex w-full text-zinc-600"
+							>No hay resultados para la busqueda: {storeProfesional.searchValue}</span
+						>
+					{:else}
+						{#each storeProfesional.filtered as profesional}
+							<Table.Row>
+								<Table.Cell class="font-medium">{profesional.nombre}</Table.Cell>
+								<Table.Cell>{profesional.documento}</Table.Cell>
+								<Table.Cell>{profesional.email}</Table.Cell>
+								<Table.Cell>{profesional.telefono}</Table.Cell>
+								<Table.Cell
+									>{profesional.rol === Rol.MEDICA_ESTETICA
+										? 'Medica estetica'
+										: 'Cosmetologa'}</Table.Cell
+								>
+								<TableCell>
+									<div class="flex space-x-2">
+										<DialogEditProfesional {profesional} onSaveChanges={handleProfesionalEdit} />
+										<div>
+											<AlertDialog.Root>
+												<AlertDialog.Trigger
+													><Button
+														class="bg- h-7 border-2 border-red-500 bg-red-100 text-red-500 hover:scale-105 hover:border-red-500 hover:bg-red-500 hover:text-white "
+													>
+														<i class="bi bi-trash3"></i><span>Eliminar</span></Button
+													></AlertDialog.Trigger
+												>
+												<AlertDialog.Content>
+													<AlertDialog.Header>
+														<AlertDialog.Title>Eliminar</AlertDialog.Title>
+														<AlertDialog.Description>
+															Esta acción no se puede deshacer. Esto eliminará permanentemente el
+															profesional de la base de datos.
+														</AlertDialog.Description>
+													</AlertDialog.Header>
+													<AlertDialog.Footer>
+														<AlertDialog.Cancel>Cancelar</AlertDialog.Cancel>
+														<AlertDialog.Action>Continuar</AlertDialog.Action>
+													</AlertDialog.Footer>
+												</AlertDialog.Content>
+											</AlertDialog.Root>
+										</div>
+									</div>
+								</TableCell>
+							</Table.Row>
+						{/each}
+					{/if}
 				</Table.Body>
 			</Table.Root>
 		</div>

@@ -15,11 +15,18 @@ type Horario = {
 	horas: HoraDisponible[];
 };
 
-type Profesional = {
+export enum Rol {
+	MEDICA_ESTETICA = 'MEDICA_ESTETICA',
+	COSMETOLOGA = 'COSMETOLOGA',
+	NINGUNO = 'NINGUNO'
+}
+
+export type Profesional = {
+	id?: number;
 	nombre: string;
 	documento: string;
 	telefono: string;
 	email: string;
-	rol: 'medica estetica' | 'cosmetologa';
-	disponibilidad: Horario[];
+	rol: Rol;
+	disponibilidad?: Horario[];
 };
