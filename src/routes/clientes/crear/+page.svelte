@@ -32,9 +32,10 @@
 
 		if (result === null) {
 			toast.error('Error al crear cliente');
-		}
-
-		toast.success(`Cliente creado con exito: ${result?.nombre as string}`);
+			
+			toast.error("El cliente con ese documento ya existe");
+			}
+			else{toast.success(`Cliente creado con exito: ${result?.nombre as string}`);}
 
 		// Limpiar el formulario
 		newClient = {

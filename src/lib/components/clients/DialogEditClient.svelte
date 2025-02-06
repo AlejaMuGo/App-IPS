@@ -12,16 +12,41 @@
 
 	type Props = {
 		client: Client;
-		onSaveChanges: (client: Client) => void;
+		onSaveChanges: (client: Client) => Promise<boolean>;
 	};
 
 	const { client, onSaveChanges }: Props = $props();
 	const clientState: Client = $state({ ...client });
-
-	function handleClickSave() {
-		onSaveChanges(clientState);
-		myOpen = false;
+	type ValidationFields = {
+		[K in keyof Client]: boolean;
 	}
+
+	const validationFields = $state<ValidationFields>(Object.fromEntries(Object.keys(client).map((k: keyof Client) => [k, true])) as ValidationFields)
+
+	async function handleClickSave() {
+		
+		let hasEmpty = false;
+		for (const entry of Object.entries(clientState)) {
+			const [key, value] = entry;
+			if (value === "") {
+				hasEmpty = true;
+				validationFields[key as keyof Client] = false;
+			} else {
+				validationFields[key as keyof Client] = true;
+			}
+		}
+
+		if (hasEmpty) {
+			toast.error('Todos los campos son obligatorios');
+			return;			
+		}
+
+		const result = await onSaveChanges(clientState);
+		if (result) {
+			myOpen = false;
+		}
+	}
+
 </script>
 
 <Dialog.Root bind:open={() => myOpen, (newOpen) => (myOpen = newOpen)}>
@@ -43,23 +68,31 @@
 		<div class="flex-items-center flex flex-col space-y-6">
 			<div class="space-y-2">
 				<h1>Nombre</h1>
-				<Input class="w-full" placeholder="Nombre completo" bind:value={clientState.nombre} />
+				<Input class="w-full {!validationFields.nombre && "border-red-500"}" placeholder="Nombre completo"
+				bind:value={clientState.nombre} />
 			</div>
 			<div class="space-y-2">
 				<h1>Documento</h1>
 				<Input
-					class="w-full"
+					class="w-full {!validationFields.documento && "border-red-500"}"
 					placeholder="Número de documento"
-					bind:value={clientState.documento}
+					bind:value={clientState.documento} 
 				/>
 			</div>
 			<div class="space-y-2">
 				<h1>Correo</h1>
-				<Input class="w-full" placeholder="Correo electrónico" bind:value={clientState.email} />
+				<Input
+					type="email"
+					class="w-full {!validationFields.email && "border-red-500"}"
+					placeholder="Correo electrónico"
+					bind:value={clientState.email} />
 			</div>
 			<div class="space-y-2">
 				<h1>Telefono</h1>
-				<Input class="w-full" placeholder="Número de telefono" bind:value={clientState.telefono} />
+				<Input
+					class="w-full {!validationFields.telefono && "border-red-500"}"
+					placeholder="Número de telefono"
+					bind:value={clientState.telefono} />
 			</div>
 
 			<Button

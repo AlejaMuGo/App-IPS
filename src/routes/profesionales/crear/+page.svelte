@@ -45,10 +45,11 @@
 		const result = await databaseController.createProfesional(newProfesional);
 
 		if (result === null) {
-			toast.error('Error al crear cliente');
-		}
-
-		toast.success(`Profesional creado con exito: ${result?.nombre as string}`);
+			toast.error('Error al crear profesional');
+			
+			toast.error("El profesional con ese documento ya existe");
+			}
+			else{toast.success(`Profesional creado con exito: ${result?.nombre as string}`);}
 
 		// Limpiar el formulario
 		newProfesional = {
