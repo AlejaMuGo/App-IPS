@@ -11,15 +11,40 @@
 
 	type Props = {
 		profesional: Profesional;
-		onSaveChanges: (profesional: Profesional) => void;
+		onSaveChanges: (profesional: Profesional) => Promise<boolean>;
 	};
 
 	const { profesional, onSaveChanges }: Props = $props();
 	const profesionalState: Profesional = $state({ ...profesional });
 
-	function handleClickSave() {
-		onSaveChanges(profesionalState);
-		myOpen = false;
+	type ValidationFields = {
+		[K in keyof Profesional]: boolean;
+	}
+
+	const validationFields = $state<ValidationFields>(Object.fromEntries(Object.keys(profesional).map((k: keyof Profesional) => [k, true])) as ValidationFields)
+
+	async function handleClickSave() {
+		
+		let hasEmpty = false;
+		for (const entry of Object.entries(profesionalState)) {
+			const [key, value] = entry;
+			if (value === "") {
+				hasEmpty = true;
+				validationFields[key as keyof Profesional] = false;
+			} else {
+				validationFields[key as keyof Profesional] = true;
+			}
+		}
+
+		if (hasEmpty) {
+			toast.error('Todos los campos son obligatorios');
+			return;			
+		}
+
+		const result = await onSaveChanges(profesionalState);
+		if (result) {
+			myOpen = false;
+		}
 	}
 
 	const roles = [
@@ -39,7 +64,6 @@
 			class="h-7 border-2 border-indigo-500 bg-indigo-50 text-indigo-500  hover:scale-105 hover:border-indigo-500 hover:bg-indigo-500 hover:text-white "
 		>
 			<i class="bi bi-pencil-square"> </i>
-			<span>Editar</span>
 		</Button>
 	</Dialog.Trigger>
 	<Dialog.Content>
@@ -52,12 +76,14 @@
 		<div class="flex-items-center flex flex-col space-y-6">
 			<div class="space-y-2">
 				<h1>Nombre completo</h1>
-				<Input class="w-full" placeholder="Nombre completo" bind:value={profesionalState.nombre} />
+				<Input class="w-full {!validationFields.nombre && "border-red-500"}" placeholder="Nombre completo"
+				bind:value={profesionalState.nombre}
+				/>
 			</div>
 			<div class="space-y-2">
 				<h1>Documento</h1>
 				<Input
-					class="w-full"
+					class="w-full {!validationFields.documento && "border-red-500"}"
 					placeholder="Número de documento"
 					bind:value={profesionalState.documento}
 				/>
@@ -65,7 +91,8 @@
 			<div class="space-y-2">
 				<h1>Correo</h1>
 				<Input
-					class="w-full"
+					type="email"
+					class="w-full {!validationFields.email && "border-red-500"}"
 					placeholder="Correo electrónico"
 					bind:value={profesionalState.email}
 				/>
@@ -73,7 +100,7 @@
 			<div class="space-y-2">
 				<h1>Telefono</h1>
 				<Input
-					class="w-full"
+					class="w-full {!validationFields.telefono && "border-red-500"}"
 					placeholder="Número de telefono"
 					bind:value={profesionalState.telefono}
 				/>

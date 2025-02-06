@@ -36,5 +36,9 @@ export class ProfesionalStore {
 	// Método para agregar un nuevo profesional
 	addProfesional(profesional: Profesional) {
 		this.profesionales.push(profesional); // Agregar profesional sin mutar el estado
+	
+	}
+	removeProfesional(id: number) {
+		this.profesionales = this.profesionales.filter(prof => prof.id !== id);
 	}
 }

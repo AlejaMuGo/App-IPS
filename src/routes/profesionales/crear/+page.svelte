@@ -81,7 +81,7 @@
 		<!-- Inputs vinculados al estado local -->
 		<div class="space-y-4 px-2">
 			<div class="space-y-2">
-				<h1>Nombre</h1>
+				<h1>Nombre completo</h1>
 				<Input class="w-full" placeholder="Nombre completo" bind:value={newProfesional.nombre} />
 			</div>
 			<div class="space-y-2">

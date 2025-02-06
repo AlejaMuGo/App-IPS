@@ -9,13 +9,38 @@
 	import { Button } from '$lib/components/ui/button/index.js';
 	import DialogEditClient from '$lib/components/clients/DialogEditClient.svelte';
 	import { DatabaseController } from '$lib/services/db.js';
-	import { toast } from 'svelte-sonner';
 	import DialogEditProfesional from '$lib/components/profesionales/DialogEditProfesional.svelte';
+	import { goto } from '$app/navigation';
+	import { toast } from 'svelte-sonner';
 
 	const { data } = $props();
 	const storeProfesional = new ProfesionalStore(data.profesionales);
+	
+
+	async function handleProfesionalDeletion(profesional: Profesional) {
+		toast.loading('Eliminando profesional...');
+
+		const databaseController = new DatabaseController();
+		const result = await databaseController.deleteProfesional(
+			profesional.id as number,
+		);
+
+		if (!result) {
+			toast.error('Error al actualizar profesional.');
+			return;
+		}
+
+		toast.success('Profesional eliminado con exito.');
+
+		storeProfesional.profesionales = storeProfesional.profesionales.filter((p) => p.id != profesional.id)
+
+		await goto('/profesionales');
+		
+	}
+	
 
 	async function handleProfesionalEdit(profesional: Profesional) {
+
 		toast.loading('Actualizando profesional...');
 
 		const databaseController = new DatabaseController();
@@ -26,7 +51,7 @@
 
 		if (updatedProfesional === null) {
 			toast.error('Error al actualizar profesional.');
-			return;
+			return true;
 		}
 
 		toast.success('Profesional actualizado con exito.');
@@ -36,6 +61,8 @@
 				storeProfesional.profesionales[i] = updatedProfesional;
 			}
 		}
+
+		return true
 	}
 </script>
 
@@ -100,12 +127,12 @@
 													><Button
 														class="bg- h-7 border-2 border-red-500 bg-red-100 text-red-500 hover:scale-105 hover:border-red-500 hover:bg-red-500 hover:text-white "
 													>
-														<i class="bi bi-trash3"></i><span>Eliminar</span></Button
+														<i class="bi bi-trash3"></i></Button
 													></AlertDialog.Trigger
 												>
 												<AlertDialog.Content>
 													<AlertDialog.Header>
-														<AlertDialog.Title>Eliminar</AlertDialog.Title>
+														<AlertDialog.Title>Eliminar profesional: {profesional.nombre}</AlertDialog.Title>
 														<AlertDialog.Description>
 															Esta acción no se puede deshacer. Esto eliminará permanentemente el
 															profesional de la base de datos.
@@ -113,7 +140,7 @@
 													</AlertDialog.Header>
 													<AlertDialog.Footer>
 														<AlertDialog.Cancel>Cancelar</AlertDialog.Cancel>
-														<AlertDialog.Action>Continuar</AlertDialog.Action>
+														<Button class= "bg-red-500 text-white hover:bg-red-800" onclick={()=>handleProfesionalDeletion(profesional)}> Eliminar</Button>
 													</AlertDialog.Footer>
 												</AlertDialog.Content>
 											</AlertDialog.Root>
