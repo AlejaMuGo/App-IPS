@@ -21,6 +21,7 @@
 		<div class="flex items-center gap-8">
 			<a href="/clientes" class="text-s hover:text-indigo-500">Gestión clientes</a>
 			<a href="/profesionales" class="text-s hover:text-indigo-500">Gestión profesionales</a>
+			<a href="/citas" class="text-s hover:text-indigo-500">Gestión citas</a>
 		</div>
 	</div>
 	<div>
