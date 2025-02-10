@@ -27,6 +27,8 @@
 		}
 		
 	} 
+
+	let open = $state(false);
 	async function handleCitaDeletion(cita: Cita) {
 		toast.loading('Eliminando cita...');
 
@@ -44,6 +46,7 @@
 
 		storeCitas.citas = storeCitas.citas.filter((c) => c.id != cita.id)
 
+		open = false
 		await goto('/citas');
 		
 	}
@@ -122,7 +125,7 @@
 							<Table.Cell>
 								<div class="flex space-x-2">
 									<div>
-										<AlertDialog.Root>
+										<AlertDialog.Root bind:open>
 											<AlertDialog.Trigger
 												><Button
 													class="bg- h-7 border-2 border-red-500 bg-red-100 text-red-500 hover:scale-105 hover:border-red-500 hover:bg-red-500 hover:text-white "
