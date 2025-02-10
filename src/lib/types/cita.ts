@@ -3,6 +3,7 @@ import type { Profesional } from "./profesional"
 import type { Service } from "./service";
 
 export type Cita = {
+    id?: number;
     client: Client;
     service: Service;
     profesional: Profesional;
