@@ -8,6 +8,7 @@
 
 	let { data }: { data: PageData } = $props();
 	const storeCitas = new citaStore(data.citas);
+	let checked = $state(false);
 </script>
 
 <main class="flex flex-col gap-12 px-12 py-12">
@@ -73,7 +74,10 @@
 							</Table.Cell>
 							<Table.Cell>
 								<div class="flex items-center">
-									<Switch />
+									<Switch 
+										bind:checked
+										class="data-[state=checked]:bg-indigo-500 data-[state=unchecked]:border-gray-400"
+									/>
 								</div>
 							</Table.Cell>
 						</Table.Row>
