@@ -1,6 +1,7 @@
 import { supabase } from '$lib/services/supabase';
 import type { Client } from '$lib/types/client';
 import type { Profesional } from '$lib/types/profesional';
+import type { Service } from '$lib/types/service';
 
 export class DatabaseController {
 	async createClient(client: Client): Promise<Client | null> {
@@ -81,6 +82,11 @@ export class DatabaseController {
 		}
 
 		return true
+	}
+
+	async getServices(): Promise<Service[]> {
+		let { data: services, error } = await supabase.from('service').select('*');
+		return services as Service[];
 	}
 	
 }
