@@ -5,10 +5,26 @@
 	import { citaStore } from '$lib/stores/citas.svelte';
 	import { Switch } from '$lib/components/ui/switch/index.js';
 	import { RolToDisplay } from '$lib/types/profesional';
-
+	import { DatabaseController } from '$lib/services/db';
+	import { toast } from 'svelte-sonner';
+	
 	let { data }: { data: PageData } = $props();
 	const storeCitas = new citaStore(data.citas);
-	let checked = $state(false);
+	const db = new DatabaseController();
+	async function confirmarCita(id: number, confirmed: boolean) {
+		toast.loading('Actualizando cita...');
+		await db.updateCita(id, {
+			confirmed: confirmed
+		});
+		
+		if (confirmed === true) {
+			toast.success('Cita confirmada');
+		} else {
+			toast.success('Cita desconfirmada');
+		}
+		
+		
+	} 
 </script>
 
 <main class="flex flex-col gap-12 px-12 py-12">
@@ -75,7 +91,8 @@
 							<Table.Cell>
 								<div class="flex items-center">
 									<Switch 
-										bind:checked
+										bind:checked={cita.confirmed}
+										onCheckedChange={(checked) => confirmarCita(cita.id as number, checked)}
 										class="data-[state=checked]:bg-indigo-500 data-[state=unchecked]:border-gray-400"
 									/>
 								</div>
@@ -86,5 +103,6 @@
 			</Table.Body>
 		</Table.Root>
 	</div>
-	<Table.Caption>Listado de citas</Table.Caption>
+	
+	<h5 class="text-center text-sm text-muted-foreground">Listado de citas</h5>
 </main>

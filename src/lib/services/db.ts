@@ -99,4 +99,19 @@ export class DatabaseController {
 		let { data: citas, error } = await supabase.from('appointment').select(`*, client (*), service (*), profesional (*)`).eq('profesional', id)
 		return citas as Cita[];
 	}
+
+	async updateCita(id: number, cita: Partial<Cita>): Promise<Cita | null> {
+		const { data, error } = await supabase.from('appointment').update(cita).eq('id', id).select();
+
+		if (error !== null) {
+			console.log(error);
+			return null;
+		}
+
+		if (data === null || data.length === 0) {
+			return null;
+		}
+
+		return data[0] as Cita;
+	}
 }
