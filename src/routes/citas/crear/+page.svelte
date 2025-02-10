@@ -10,6 +10,7 @@
 	let { data }: { data: PageData } = $props();
 	const clientes = $state(data.clientes);
 	const profesionales = $state(data.profesionales);
+	const servicios = $state(data.servicios);
 
 	type OpcionSelect = {
 		value: string;
@@ -26,8 +27,23 @@
 	}
 	let valueCliente = $state('');
 
-	const triggerContent = $derived(
+	const triggerContentCliente = $derived(
 		opcionesClientes.find((f) => f.value === valueCliente)?.label ?? 'Selecciona un cliente'
+	);
+
+	const opcionesServicios: OpcionSelect[] = [];
+	for (const servicio of servicios) {
+		const opcion = {
+			value: servicio.value,
+			label: servicio.nombre
+		};
+		opcionesServicios.push(opcion);
+	}
+
+	let valueServicio = $state('');
+
+	const triggerContentServicio = $derived(
+		opcionesServicios.find((serviceOption) => serviceOption.value === valueServicio)?.label ?? 'Selecciona un servicio'
 	);
 
 	let valueTime = $state(today(getLocalTimeZone()));
@@ -58,13 +74,30 @@
 			<h5 class="font-semibold">Seleccionar cliente</h5>
 			<Select.Root type="single" name="seleccionarCliente" bind:value={valueCliente}>
 				<Select.Trigger class="w-full">
-					{triggerContent}
+					{triggerContentCliente}
 				</Select.Trigger>
 				<Select.Content>
 					<Select.Group>
 						<Select.GroupHeading>Clientes</Select.GroupHeading>
 						{#each opcionesClientes as cliente}
 							<Select.Item value={cliente.value} label={cliente.label}>{cliente.label}</Select.Item>
+						{/each}
+					</Select.Group>
+				</Select.Content>
+			</Select.Root>
+		</div>
+
+		<div class="rounded-md border border-2 p-6 space-y-3">
+			<h5 class="font-semibold">Seleccionar servicio</h5>
+			<Select.Root type="single" name="seleccionarServicio" bind:value={valueServicio}>
+				<Select.Trigger class="w-full">
+					{triggerContentServicio}
+				</Select.Trigger>
+				<Select.Content>
+					<Select.Group>
+						<Select.GroupHeading>Servicios</Select.GroupHeading>
+						{#each opcionesServicios as servicio}
+							<Select.Item value={servicio.value} label={servicio.label}>{servicio.label}</Select.Item>
 						{/each}
 					</Select.Group>
 				</Select.Content>
