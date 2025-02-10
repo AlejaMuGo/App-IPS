@@ -69,7 +69,7 @@
 		<i class="bi bi-arrow-left"></i>Volver</a>
 </div>
 
-<class class="mx-auto flex max-w-4xl flex-col gap-12 px-12 py-2">
+<div class="mx-auto flex max-w-4xl flex-col gap-12 px-12 py-2">
 	<div class="px-2">
 		<div class="space-y-4">
 			<h2 class="text-3xl font-bold">Registrar profesional</h2>
@@ -137,4 +137,4 @@
 			>
 		</div>
 	</div>
-</class>
+</div>
