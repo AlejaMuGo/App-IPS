@@ -21,6 +21,16 @@ export enum Rol {
 	NINGUNO = 'NINGUNO'
 }
 
+export function RolToDisplay(rol: Rol) {
+	if (rol === Rol.MEDICA_ESTETICA) {
+		return 'Médica Estética';
+	} else if (rol === Rol.COSMETOLOGA) {
+		return 'Cosmetóloga';
+	} else {
+		return 'Ninguno';
+	}
+}
+
 export type Profesional = {
 	id?: number;
 	nombre: string;

@@ -48,11 +48,12 @@
 		await goto('/clientes');
 	}
 </script>
-
-<a href="/clientes" class="justify-left flex gap-2 px-12 py-5 hover:text-indigo-600">
+<div class="mx-auto flex max-w-4xl flex-col gap-12 px-0 py-2">
+	<a href="/clientes" class="justify-left flex gap-2 px-12 py-5 hover:text-indigo-600">
 	<i class="bi bi-arrow-left"></i>Volver</a
->
-<class class="mx-auto flex max-w-4xl flex-col gap-12 px-12 py-2">
+></div>
+
+<div class="mx-auto flex max-w-4xl flex-col gap-12 px-12 py-2">
 	<div class="px-2">
 		<div class="space-y-4">
 			<h2 class="text-3xl font-bold">Registrar cliente</h2>
@@ -89,4 +90,4 @@
 			>
 		</div>
 	</div>
-</class>
+</div>
