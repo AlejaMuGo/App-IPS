@@ -124,7 +124,7 @@
 							<!-- svelte-ignore a11y_click_events_have_key_events -->
 							<div
 								onclick={() => seleccionarProfesional(profesional.documento)}
-								class="rounded-md border px-4 py-3"
+								class="rounded-md border px-4 py-3 hover:bg-indigo-50 cursor-pointer"
 								class:border-indigo-500={profesionalSeleccionado === profesional.documento}
 								class:bg-indigo-50={profesionalSeleccionado === profesional.documento}
 							>
