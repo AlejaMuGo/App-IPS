@@ -114,4 +114,14 @@ export class DatabaseController {
 
 		return data[0] as Cita;
 	}
+
+	async deleteCita(id: number): Promise<boolean> {
+		const { error } = await supabase.from('appointment').delete().eq('id', id)
+		if (error !== null) {
+			console.log(error);
+			return false;
+		}
+
+		return true
+	}
 }

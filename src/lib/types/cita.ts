@@ -11,4 +11,4 @@ export type Cita = {
     start_time: string;
     end_time: string;
     confirmed: boolean;
-}
+};

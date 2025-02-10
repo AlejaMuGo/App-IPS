@@ -7,6 +7,9 @@
 	import { RolToDisplay } from '$lib/types/profesional';
 	import { DatabaseController } from '$lib/services/db';
 	import { toast } from 'svelte-sonner';
+	import { goto } from '$app/navigation';
+	import type { Cita } from '$lib/types/cita';
+	import * as AlertDialog from '$lib/components/ui/alert-dialog/index.js';
 	
 	let { data }: { data: PageData } = $props();
 	const storeCitas = new citaStore(data.citas);
@@ -23,8 +26,27 @@
 			toast.success('Cita desconfirmada');
 		}
 		
-		
 	} 
+	async function handleCitaDeletion(cita: Cita) {
+		toast.loading('Eliminando cita...');
+
+		const db = new DatabaseController();
+		const result = await db.deleteCita(
+			cita.id as number,
+		);
+
+		if (!result) {
+			toast.error('Error al eliminar cita.');
+			return;
+		}
+
+		toast.success('Cita eliminada con exito.');
+
+		storeCitas.citas = storeCitas.citas.filter((c) => c.id != cita.id)
+
+		await goto('/citas');
+		
+	}
 </script>
 
 <main class="flex flex-col gap-12 px-12 py-12">
@@ -95,6 +117,33 @@
 										onCheckedChange={(checked) => confirmarCita(cita.id as number, checked)}
 										class="data-[state=checked]:bg-indigo-500 data-[state=unchecked]:border-gray-400"
 									/>
+								</div>
+							</Table.Cell>
+							<Table.Cell>
+								<div class="flex space-x-2">
+									<div>
+										<AlertDialog.Root>
+											<AlertDialog.Trigger
+												><Button
+													class="bg- h-7 border-2 border-red-500 bg-red-100 text-red-500 hover:scale-105 hover:border-red-500 hover:bg-red-500 hover:text-white "
+												>
+													<i class="bi bi-trash3"></i></Button
+												></AlertDialog.Trigger
+											>
+											<AlertDialog.Content>
+												<AlertDialog.Header>
+													<AlertDialog.Title>Eliminar cita: {cita.client.nombre} {cita.date}</AlertDialog.Title>
+													<AlertDialog.Description>
+														Esta acción no se puede deshacer. Esto eliminará permanentemente la cita de la base de datos.
+													</AlertDialog.Description>
+												</AlertDialog.Header>
+												<AlertDialog.Footer>
+													<AlertDialog.Cancel>Cancelar</AlertDialog.Cancel>
+													<Button class= "bg-red-500 text-white hover:bg-red-800" onclick={()=>handleCitaDeletion(cita)}> Eliminar</Button>
+												</AlertDialog.Footer>
+											</AlertDialog.Content>
+										</AlertDialog.Root>
+									</div>
 								</div>
 							</Table.Cell>
 						</Table.Row>

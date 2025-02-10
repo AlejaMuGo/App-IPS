@@ -38,7 +38,10 @@ export class citaStore {
 		this.citas = citas;
 	}
 	// Método para agregar un nuevo cliente
-	addClient(cita: Cita) {
-		this.citas.push(cita); // Agregar cliente sin mutar el estado
+	addCita(cita: Cita) {
+		this.citas.push(cita);
+	}
+	removeCita(id: number) {
+		this.citas = this.citas.filter(prof => prof.id !== id);
 	}
 }
