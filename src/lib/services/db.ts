@@ -2,6 +2,7 @@ import { supabase } from '$lib/services/supabase';
 import type { Client } from '$lib/types/client';
 import type { Profesional } from '$lib/types/profesional';
 import type { Service } from '$lib/types/service';
+import type { Cita } from '$lib/types/cita';
 
 export class DatabaseController {
 	async createClient(client: Client): Promise<Client | null> {
@@ -89,4 +90,13 @@ export class DatabaseController {
 		return services as Service[];
 	}
 	
+	async getCitas(): Promise<Cita[]> {
+		let { data: citas, error } = await supabase.from('appointment').select(`*, client (*), service (*), profesional (*)`)
+		return citas as Cita[];
+	}
+
+	async getCitasByProfesional(id: number): Promise<Cita[]> {
+		let { data: citas, error } = await supabase.from('appointment').select(`*, client (*), service (*), profesional (*)`).eq('profesional', id)
+		return citas as Cita[];
+	}
 }
