@@ -24,10 +24,10 @@
 		};
 		opcionesClientes.push(opcion);
 	}
-	let value = $state('');
+	let valueCliente = $state('');
 
 	const triggerContent = $derived(
-		opcionesClientes.find((f) => f.value === value)?.label ?? 'Selecciona un cliente'
+		opcionesClientes.find((f) => f.value === valueCliente)?.label ?? 'Selecciona un cliente'
 	);
 
 	let valueTime = $state(today(getLocalTimeZone()));
@@ -56,7 +56,7 @@
 
 		<div class="rounded-md border border-2 p-6 space-y-3">
 			<h5 class="font-semibold">Seleccionar cliente</h5>
-			<Select.Root type="single" name="seleccionarCliente" bind:value>
+			<Select.Root type="single" name="seleccionarCliente" bind:value={valueCliente}>
 				<Select.Trigger class="w-full">
 					{triggerContent}
 				</Select.Trigger>
