@@ -12,6 +12,7 @@
 	import * as AlertDialog from '$lib/components/ui/alert-dialog/index.js';
 	import { Input } from '$lib/components/ui/input/index.js';
 	import * as Select from '$lib/components/ui/select/index.js';
+	import type { OpcionesFiltroFecha } from '$lib/types/filtros';
 
 	let { data }: { data: PageData } = $props();
 	const storeCitas = new citaStore(data.citas);
@@ -22,17 +23,15 @@
 		label: string;
 	};
 
-	const opcionesFecha: OpcionSelect[] = [];
-	for (const cita of data.citas) {
-		const opcion = {
-			value: cita.date,
-			label: cita.date
-		};
-		opcionesFecha.push(opcion);
-	}
-	let valueFecha = $state('');
+	const opcionesFecha: {value: OpcionesFiltroFecha, label: string; }[] = [
+		{ value: '', label: 'Todas' },
+		{ value: 'hoy', label: 'Hoy' },
+		{ value: "pasados", label: 'Pasadas' },
+		{ value: "proximos", label: 'Próximas' }
+	]
+
 	const triggerContentFecha = $derived(
-		opcionesFecha.find((D) => D.value === storeCitas.searchValue)?.label ?? 'Selecciona una fecha'
+		opcionesFecha.find((D) => D.value === storeCitas.filters.fecha)?.label ?? 'Selecciona una fecha'
 	);
 
 	const opcionesEstado: OpcionSelect[] = [
@@ -40,6 +39,7 @@
 		{ value: 'confirmada', label: 'Confirmado' },
 		{ value: 'noconfirmado', label: 'No confirmado' }
 	];
+
 	const triggerContentEstado = $derived(opcionesEstado.find((opt) => opt.value === storeCitas.filters.estado)?.label ?? 'Selecciona un estado');
 
 	async function confirmarCita(id: number, confirmed: boolean) {
@@ -97,7 +97,7 @@
 				bind:value={storeCitas.searchValue}
 				placeholder="Busca por cliente, profesional o fecha"
 			/>
-			<Select.Root type="single" name="seleccionarFecha" bind:value={storeCitas.searchValue}>
+			<Select.Root type="single" name="seleccionarFecha" bind:value={storeCitas.filters.fecha}>
 				<Select.Trigger class="w-2/12">
 					{triggerContentFecha}
 				</Select.Trigger>

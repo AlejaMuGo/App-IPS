@@ -21,6 +21,14 @@ export function citaCumpleFiltroFecha(cita: Cita, valorfiltro: OpcionesFiltroFec
 
 	if (valorfiltro === '') return true;
 
+    if (valorfiltro === 'hoy') {
+        if (fechaCita.toDateString() === hoy.toDateString()) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
 	if (valorfiltro === 'pasados') {
 		if (fechaCita < hoy) {
             return true;
@@ -30,13 +38,6 @@ export function citaCumpleFiltroFecha(cita: Cita, valorfiltro: OpcionesFiltroFec
 	}
     if (valorfiltro === 'proximos') {
         if (fechaCita > hoy) {
-            return true;
-        } else {
-            return false;
-        }
-    }
-    if (valorfiltro === 'hoy') {
-        if (fechaCita.toDateString() === hoy.toDateString()) {
             return true;
         } else {
             return false;

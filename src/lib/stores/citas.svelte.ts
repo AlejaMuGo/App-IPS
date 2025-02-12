@@ -1,5 +1,6 @@
 import type { Cita } from "$lib/types/cita";
-import { citaCumpleFiltroEstado } from "$lib/tools/filtros";
+import { citaCumpleFiltroFecha, citaCumpleFiltroEstado } from "$lib/tools/filtros";
+import type { OpcionesFiltroFecha } from "$lib/types/filtros";
 
 function normalizeString(string: string) {
 	return string
@@ -15,6 +16,7 @@ export class citaStore {
 
 	filters = $state({
 		estado: "" as "confirmada" | "noconfirmada" | "",
+		fecha: "" as OpcionesFiltroFecha,
 	})
 
 	filtered: Cita[] = $derived(
@@ -39,8 +41,9 @@ export class citaStore {
 			}
 
 			const matchFiltroEstado = citaCumpleFiltroEstado(cita, this.filters.estado);
+			const matchFiltroFecha = citaCumpleFiltroFecha(cita, this.filters.fecha);
 
-			return filtroBusqueda && matchFiltroEstado;
+			return filtroBusqueda && matchFiltroEstado && matchFiltroFecha;
 		})
 	);
 
