@@ -29,8 +29,11 @@ export class citaStore {
 			const matchHora = normalizeString(cita.start_time)
 				.toLowerCase()
 				.includes(normalizeString(this.searchValue));
+			const matchConfirmed = normalizeString(cita.confirmed.toString())
+				.toLowerCase()
+				.includes(normalizeString(this.searchValue));
 
-			return matchCliente || matchProfesional || matchFecha || matchHora;
+			return matchCliente || matchProfesional || matchFecha || matchHora || matchConfirmed;
 		})
 	);
 

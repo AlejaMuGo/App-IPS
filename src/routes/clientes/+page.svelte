@@ -12,14 +12,14 @@
 	const { data } = $props();
 	const storeClients = new ClientStore(data.clientes);
 
-	async function handleClientEdit(client: Client) {
+	async function handleClientEdit(client: Client): Promise<boolean> {
 		toast.loading('Actualizando cliente...');
 
 		const databaseController = new DatabaseController();
 		const updatedClient = await databaseController.updateClient(client.id as number, client);
 		if (updatedClient === null) {
 			toast.error('Error al actualizar cliente.');
-			return;
+			return false;
 		}
 
 		toast.success('Cliente actualizado con exito.');
@@ -29,6 +29,7 @@
 				storeClients.clients[i] = updatedClient;
 			}
 		}
+		return true;
 	}
 </script>
 
