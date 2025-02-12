@@ -10,6 +10,7 @@
 	import { goto } from '$app/navigation';
 	import type { Cita } from '$lib/types/cita';
 	import * as AlertDialog from '$lib/components/ui/alert-dialog/index.js';
+	import { Input } from '$lib/components/ui/input/index.js';
 	
 	let { data }: { data: PageData } = $props();
 	const storeCitas = new citaStore(data.citas);
@@ -66,6 +67,13 @@
 		>
 	</div>
 
+	<div>
+		<Input
+			class="w-96"
+			bind:value={storeCitas.searchValue}
+			placeholder="Busca por cliente, profesional o fecha"
+		/>
+	</div>
 	<div class="rounded-md border">
 		<Table.Root class="w-full">
 			<Table.Header>
@@ -79,8 +87,7 @@
 			<Table.Body>
 				{#if storeCitas.filtered.length === 0}
 					<span class="flex w-full text-zinc-600"
-						>No hay resultados para la busqueda: {storeCitas.searchValue}</span
-					>
+						>No hay resultados para la busqueda: {storeCitas.searchValue}</span>
 				{:else}
 					{#each storeCitas.filtered as cita}
 						<Table.Row>

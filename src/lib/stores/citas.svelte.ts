@@ -17,10 +17,10 @@ export class citaStore {
 				return true;
 			}
 
-			const matchCliente = normalizeString(cita.client.toString())
+			const matchCliente = normalizeString(cita.client.nombre.toString())
 				.toLowerCase()
 				.includes(normalizeString(this.searchValue));
-			const matchProfesional = normalizeString(cita.profesional.toString())
+			const matchProfesional = normalizeString(cita.profesional.nombre.toString())
 				.toLowerCase()
 				.includes(normalizeString(this.searchValue));
 			const matchFecha = normalizeString(cita.date.toString())
