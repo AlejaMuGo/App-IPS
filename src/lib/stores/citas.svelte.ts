@@ -1,6 +1,6 @@
 import type { Cita } from "$lib/types/cita";
 import { citaCumpleFiltroFecha, citaCumpleFiltroEstado } from "$lib/tools/filtros";
-import type { OpcionesFiltroFecha } from "$lib/types/filtros";
+import type { OpcionesFiltroEstado, OpcionesFiltroFecha } from "$lib/types/filtros";
 
 function normalizeString(string: string) {
 	return string
@@ -15,7 +15,7 @@ export class citaStore {
 	citas: Cita[] = $state([]);
 
 	filters = $state({
-		estado: "" as "confirmada" | "noconfirmada" | "",
+		estado: "" as OpcionesFiltroEstado,
 		fecha: "" as OpcionesFiltroFecha,
 	})
 

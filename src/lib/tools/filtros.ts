@@ -1,10 +1,8 @@
 import type { Cita } from '$lib/types/cita';
-import type { OpcionesFiltroFecha } from '$lib/types/filtros';
+import type { OpcionesFiltroEstado, OpcionesFiltroFecha } from '$lib/types/filtros';
 
-export function citaCumpleFiltroEstado(
-	cita: Cita,
-	valorFiltro: 'confirmada' | 'noconfirmada' | ''
-): boolean {
+
+export function citaCumpleFiltroEstado(cita: Cita, valorFiltro: OpcionesFiltroEstado): boolean {
 	if (valorFiltro === '') return true;
 
 	const valueEstado = valorFiltro === 'confirmada' ? true : false;
