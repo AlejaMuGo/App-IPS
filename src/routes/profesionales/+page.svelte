@@ -109,7 +109,10 @@
 					{:else}
 						{#each storeProfesional.filtered as profesional}
 							<Table.Row>
-								<Table.Cell class="font-medium">{profesional.nombre}</Table.Cell>
+								<Table.Cell class="font-medium">
+									<i class="bi bi-people text-gray-400 mr-2"></i>
+									{profesional.nombre}
+								</Table.Cell>
 								<Table.Cell>{profesional.documento}</Table.Cell>
 								<Table.Cell>{profesional.email}</Table.Cell>
 								<Table.Cell>{profesional.telefono}</Table.Cell>
