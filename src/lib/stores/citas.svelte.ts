@@ -1,4 +1,5 @@
 import type { Cita } from "$lib/types/cita";
+import { citaCumpleFiltroEstado } from "$lib/tools/filtros";
 
 function normalizeString(string: string) {
 	return string
@@ -11,29 +12,35 @@ function normalizeString(string: string) {
 export class citaStore {
 	searchValue = $state('');
 	citas: Cita[] = $state([]);
+
+	filters = $state({
+		estado: "" as "confirmada" | "noconfirmada" | "",
+	})
+
 	filtered: Cita[] = $derived(
 		this.citas.filter((cita) => {
-			if (this.searchValue === '') {
-				return true;
+
+			let filtroBusqueda = this.searchValue === "" ? true : false;
+			if (this.searchValue !== '') {
+				const matchCliente = normalizeString(cita.client.nombre.toString())
+				.toLowerCase()
+				.includes(normalizeString(this.searchValue));
+				const matchProfesional = normalizeString(cita.profesional.nombre.toString())
+				.toLowerCase()
+				.includes(normalizeString(this.searchValue));
+				const matchFecha = normalizeString(cita.date.toString())
+				.toLowerCase()
+				.includes(normalizeString(this.searchValue));
+				const matchHora = normalizeString(cita.start_time)
+				.toLowerCase()
+				.includes(normalizeString(this.searchValue));
+
+				filtroBusqueda =  matchCliente || matchProfesional || matchFecha || matchHora;
 			}
 
-			const matchCliente = normalizeString(cita.client.nombre.toString())
-				.toLowerCase()
-				.includes(normalizeString(this.searchValue));
-			const matchProfesional = normalizeString(cita.profesional.nombre.toString())
-				.toLowerCase()
-				.includes(normalizeString(this.searchValue));
-			const matchFecha = normalizeString(cita.date.toString())
-				.toLowerCase()
-				.includes(normalizeString(this.searchValue));
-			const matchHora = normalizeString(cita.start_time)
-				.toLowerCase()
-				.includes(normalizeString(this.searchValue));
-			const matchConfirmed = normalizeString(cita.confirmed.toString())
-				.toLowerCase()
-				.includes(normalizeString(this.searchValue));
+			const matchFiltroEstado = citaCumpleFiltroEstado(cita, this.filters.estado);
 
-			return matchCliente || matchProfesional || matchFecha || matchHora || matchConfirmed;
+			return filtroBusqueda && matchFiltroEstado;
 		})
 	);
 
@@ -47,4 +54,6 @@ export class citaStore {
 	removeCita(id: number) {
 		this.citas = this.citas.filter(prof => prof.id !== id);
 	}
+
+	
 }
