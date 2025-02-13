@@ -2,7 +2,8 @@ import type { Cita } from '$lib/types/cita';
 import type { OpcionesFiltroEstado, OpcionesFiltroFecha } from '$lib/types/filtros';
 
 
-export function citaCumpleFiltroEstado(cita: Cita, valorFiltro: OpcionesFiltroEstado): boolean {
+export function citaCumpleFiltroEstado(
+	cita: Cita, valorFiltro: OpcionesFiltroEstado): boolean {
 	if (valorFiltro === '') return true;
 
 	const valueEstado = valorFiltro === 'confirmada' ? true : false;
@@ -14,33 +15,27 @@ export function citaCumpleFiltroEstado(cita: Cita, valorFiltro: OpcionesFiltroEs
 }
 
 export function citaCumpleFiltroFecha(cita: Cita, valorfiltro: OpcionesFiltroFecha): boolean {
-	const hoy = new Date();
-	const fechaCita = new Date(cita.date);
+    const hoy = new Date();
+    hoy.setHours(0, 0, 0, 0); // Reiniciamos la hora de hoy a medianoche
 
-	if (valorfiltro === '') return true;
+    const fechaCita = new Date(cita.date);
+    fechaCita.setHours(fechaCita.getHours() + 5); // Ajustamos la diferencia horaria de UTC-5
+    fechaCita.setHours(0, 0, 0, 0); // Reiniciamos la hora de la cita a medianoche
+
+    if (valorfiltro === '') return true;
 
     if (valorfiltro === 'hoy') {
-        if (fechaCita.toDateString() === hoy.toDateString()) {
-            return true;
-        } else {
-            return false;
-        }
+        return fechaCita.getTime() === hoy.getTime();
     }
 
-	if (valorfiltro === 'pasados') {
-		if (fechaCita < hoy) {
-            return true;
-		} else {
-            return false;
-        }
-	}
+    if (valorfiltro === 'pasados') {
+        return fechaCita.getTime() < hoy.getTime();
+    }
+
     if (valorfiltro === 'proximos') {
-        if (fechaCita > hoy) {
-            return true;
-        } else {
-            return false;
-        }
+        return fechaCita.getTime() > hoy.getTime();
     }
 
     return false;
 }
+
