@@ -23,24 +23,27 @@
 		label: string;
 	};
 
-	const opcionesFecha: {value: OpcionesFiltroFecha, label: string; }[] = [
-		{ value: '', label: 'Todas' },
+	const opcionesFecha: { value: OpcionesFiltroFecha; label: string }[] = [
+		{ value: '', label: 'Todas las fechas' },
 		{ value: 'hoy', label: 'Hoy' },
-		{ value: "pasados", label: 'Pasadas' },
-		{ value: "proximos", label: 'Próximas' }
-	]
+		{ value: 'pasados', label: 'Pasadas' },
+		{ value: 'proximos', label: 'Próximas' }
+	];
 
 	const triggerContentFecha = $derived(
 		opcionesFecha.find((D) => D.value === storeCitas.filters.fecha)?.label ?? 'Selecciona una fecha'
 	);
 
 	const opcionesEstado: OpcionSelect[] = [
-		{ value: '', label: 'Todos' },
+		{ value: '', label: 'Todos los estados' },
 		{ value: 'confirmada', label: 'Confirmado' },
 		{ value: 'noconfirmado', label: 'No confirmado' }
 	];
 
-	const triggerContentEstado = $derived(opcionesEstado.find((opt) => opt.value === storeCitas.filters.estado)?.label ?? 'Selecciona un estado');
+	const triggerContentEstado = $derived(
+		opcionesEstado.find((opt) => opt.value === storeCitas.filters.estado)?.label ??
+			'Selecciona un estado'
+	);
 
 	async function confirmarCita(id: number, confirmed: boolean) {
 		toast.loading('Actualizando cita...');
@@ -91,38 +94,40 @@
 	</div>
 
 	<div>
-		<div class="pb-6 flex items-center gap-4">
+		<div class="flex items-center justify-between gap-4 pb-6">
 			<Input
-				class="w-7/12"
+				class="w-96"
 				bind:value={storeCitas.searchValue}
 				placeholder="Busca por cliente, profesional o fecha"
 			/>
-			<Select.Root type="single" name="seleccionarFecha" bind:value={storeCitas.filters.fecha}>
-				<Select.Trigger class="w-2/12">
-					{triggerContentFecha}
-				</Select.Trigger>
-				<Select.Content class="w-full">
-					<Select.Group>
-						<Select.GroupHeading>Fechas</Select.GroupHeading>
-						{#each opcionesFecha as fecha}
-							<Select.Item value={fecha.value} label={fecha.label}>{fecha.label}</Select.Item>
-						{/each}
-					</Select.Group>
-				</Select.Content>
-			</Select.Root>
-			<Select.Root type="single" name="seleccionarEstado" bind:value={storeCitas.filters.estado}>
-				<Select.Trigger class="w-2/12">
-					{triggerContentEstado}
-				</Select.Trigger>
-				<Select.Content class="w-full">
-					<Select.Group>
-						<Select.GroupHeading>Estado</Select.GroupHeading>
-						{#each opcionesEstado as estado}
-							<Select.Item value={estado.value} label={estado.label}>{estado.label}</Select.Item>
-						{/each}
-					</Select.Group>
-				</Select.Content>
-			</Select.Root>
+			<div class="flex items-center gap-4">
+				<Select.Root type="single" name="seleccionarFecha" bind:value={storeCitas.filters.fecha}>
+					<Select.Trigger class="w-44">
+						{triggerContentFecha}
+					</Select.Trigger>
+					<Select.Content class="w-44">
+						<Select.Group>
+							<Select.GroupHeading>Fechas</Select.GroupHeading>
+							{#each opcionesFecha as fecha}
+								<Select.Item value={fecha.value} label={fecha.label}>{fecha.label}</Select.Item>
+							{/each}
+						</Select.Group>
+					</Select.Content>
+				</Select.Root>
+				<Select.Root type="single" name="seleccionarEstado" bind:value={storeCitas.filters.estado}>
+					<Select.Trigger class="w-44">
+						{triggerContentEstado}
+					</Select.Trigger>
+					<Select.Content class="w-44">
+						<Select.Group>
+							<Select.GroupHeading>Estado</Select.GroupHeading>
+							{#each opcionesEstado as estado}
+								<Select.Item value={estado.value} label={estado.label}>{estado.label}</Select.Item>
+							{/each}
+						</Select.Group>
+					</Select.Content>
+				</Select.Root>
+			</div>
 		</div>
 		<div class="rounded-md border">
 			<Table.Root class="w-full">
