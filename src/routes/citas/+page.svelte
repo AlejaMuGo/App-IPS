@@ -95,11 +95,14 @@
 
 	<div>
 		<div class="flex items-center justify-between gap-4 pb-6">
-			<Input
-				class="w-96"
-				bind:value={storeCitas.searchValue}
-				placeholder="Busca por cliente, profesional o fecha"
-			/>
+			<div class="relative w-96">
+				<Input
+				  class="pl-10 w-full"
+				  bind:value={storeCitas.searchValue}
+				  placeholder="Busca por cliente, profesional o fecha"
+				/>
+				<i class="bi bi-search-heart absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500"></i>
+			  </div>
 			<div class="flex items-center gap-4">
 				<Select.Root type="single" name="seleccionarFecha" bind:value={storeCitas.filters.fecha}>
 					<Select.Trigger class="w-44">
