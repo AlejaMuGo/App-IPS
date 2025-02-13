@@ -22,6 +22,8 @@
 			<a href="/clientes" class="text-s hover:text-indigo-500">Gestión clientes</a>
 			<a href="/profesionales" class="text-s hover:text-indigo-500">Gestión profesionales</a>
 			<a href="/citas" class="text-s hover:text-indigo-500">Gestión citas</a>
+			<a href="/mis-horarios" class="text-s hover:text-indigo-500">Mis horarios</a>
+			<a href="/mis-citas" class="text-s hover:text-indigo-500">Mis citas</a>
 		</div>
 	</div>
 	<div>
