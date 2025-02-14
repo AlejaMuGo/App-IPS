@@ -48,8 +48,16 @@ export class citaStore {
 	);
 
 	constructor(citas: Cita[]) {
-		this.citas = citas;
+		this.citas = citas.sort((a, b) => {
+			const today = new Date();
+			const dateA = new Date(a.date);
+			const dateB = new Date(b.date);
+			const diffA = Math.abs(dateA.getTime() - today.getTime());
+			const diffB = Math.abs(dateB.getTime() - today.getTime());
+			return diffA - diffB;
+		});
 	}
+	
 	// Método para agregar un nuevo cliente
 	addCita(cita: Cita) {
 		this.citas.push(cita);
