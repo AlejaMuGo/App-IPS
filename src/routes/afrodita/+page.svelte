@@ -12,10 +12,12 @@
 			<div class="h-1.5 w-60 bg-indigo-500"></div>
 		</div>
 		<Button
-			variant="secondary"
-			href="/profesionales/crear"
-			class="bg-indigo-500 text-white transition duration-150 ease-in-out hover:-translate-y-1 hover:scale-105 hover:bg-indigo-200 hover:text-indigo-900 "
-			>ingreso</Button
+		variant="secondary"
+		href="/login"
+		class="bg-indigo-500 text-white hover:bg-indigo-200 hover:text-indigo-900"
 		>
+			Ingresar
+		</Button>
+		
 	</div>
 </main>
