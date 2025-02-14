@@ -20,7 +20,6 @@
             </div>
 
             <div class="p-6">
-                <Horario />
             </div>
         </div>
         <div class="border rounded-lg w-96">
