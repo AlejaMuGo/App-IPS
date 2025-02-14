@@ -21,21 +21,17 @@ export function citaCumpleFiltroFecha(cita: Cita, valorfiltro: OpcionesFiltroFec
     const fechaCita = new Date(cita.date);
     fechaCita.setHours(fechaCita.getHours() + 5); // Ajustamos la diferencia horaria de UTC-5
     fechaCita.setHours(0, 0, 0, 0); // Reiniciamos la hora de la cita a medianoche
-
     if (valorfiltro === '') return true;
 
-    if (valorfiltro === 'hoy') {
-        return fechaCita.getTime() === hoy.getTime();
+    switch (valorfiltro) {
+        case 'hoy':
+            return fechaCita.getTime() === hoy.getTime();
+        case 'pasados':
+            return fechaCita.getTime() < hoy.getTime();
+        case 'proximos':
+            return fechaCita.getTime() > hoy.getTime();
+        default:
+            return false;
     }
-
-    if (valorfiltro === 'pasados') {
-        return fechaCita.getTime() < hoy.getTime();
-    }
-
-    if (valorfiltro === 'proximos') {
-        return fechaCita.getTime() > hoy.getTime();
-    }
-
-    return false;
 }
 
