@@ -1,30 +1,71 @@
-<script lang="ts">
-	import { Input } from '$lib/components/ui/input/index.js';
-	import { Button } from '$lib/components/ui/button/index.js';
-</script>
-
-<main class="flex flex-col items-center justify-center min-h-screen">
-	<div class="max-w-md w-full space-y-8 p-10 bg-white shadow-lg rounded-lg">
-		<h2 class="text-2xl font-bold text-center">Iniciar Sesión</h2>
-
-		<!-- Formulario que enviará los datos automáticamente -->
-		<form method="POST">
-			<div>
-				<h1>Usuario</h1>
-				<Input class="w-full" placeholder="Ingrese su usuario" name="username" required />
-			</div>
-			<div>
-				<h1>Contraseña</h1>
-				<Input type="password" class="w-full" placeholder="Ingrese su contraseña" name="password" required />
-			</div>
-            <Button 
-            class="w-full py-3 mt-6 text-lg font-medium text-white bg-indigo-600 rounded-lg hover:bg-indigo-700 focus:ring-4 focus:ring-indigo-300"
-            type="submit"
-            >
-                Iniciar Sesión
-            </Button>
-        
-		</form>
+<script>
+	import { onMount } from 'svelte';
+	import { initializeApp } from "firebase/app";
+	import { getAuth, GoogleAuthProvider, signInWithPopup } from "firebase/auth";
+	import { createClient } from '@supabase/supabase-js';
+  
+	// Configuración de Firebase
+	const firebaseConfig = {
+	  apiKey: "AIzaSyDYXo3HqFUjefAmAjmX7SiCqVSLhsOKv4M",
+	  authDomain: "afrodita-c4f9f.firebaseapp.com",
+	  projectId: "afrodita-c4f9f",
+	  storageBucket: "afrodita-c4f9f.appspot.com",
+	  messagingSenderId: "318001823965",
+	  appId: "1:318001823965:web:07ca8a17351d330849db34",
+	  measurementId: "G-22PETLPKHY"
+	};
+  
+	const app = initializeApp(firebaseConfig);
+	const auth = getAuth(app);
+	const provider = new GoogleAuthProvider();
+  
+	// Configuración de Supabase
+	const supabaseUrl = "https://tu-supabase-url.supabase.co";
+	const supabaseKey = "tu-supabase-anon-key";
+	const supabase = createClient(supabaseUrl, supabaseKey);
+  
+	let user = { displayName: "", email: "" };
+	let errorMessage = "";
+  
+	async function loginWithGoogle() {
+	  try {
+		const result = await signInWithPopup(auth, provider);
+		user = {
+	displayName: result.user.displayName || "Usuario sin nombre",
+	email: result.user.email || ""
+  };
+  
+		// Verificar en Supabase si el usuario es profesional o asesora
+		const { data, error } = await supabase
+		  .from("usuarios")
+		  .select("rol")
+		  .eq("email", user.email)
+		  .single();
+  
+		if (error || !data || (data.rol !== "profesional" && data.rol !== "asesora")) {
+		  errorMessage = "Acceso denegado: No tienes permisos.";
+		  user = { displayName: "", email: "" };
+		  return;
+		}
+	  } catch (error) {
+		console.error("Error en la autenticación", error);
+		errorMessage = "Error al iniciar sesión.";
+	  }
+	}
+  </script>
+  
+  <main class="flex flex-col items-center justify-center min-h-screen bg-gray-100 p-4">
+	<div class="bg-white p-6 rounded-lg shadow-md text-center">
+	  <h1 class="text-2xl font-bold mb-4">Iniciar sesión en Afrodita</h1>
+	  <button on:click={loginWithGoogle} class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+		Iniciar sesión con Google
+	  </button>
+	  {#if errorMessage}
+		<p class="text-red-500 mt-2">{errorMessage}</p>
+	  {/if}
+	  {#if user}
+		<p class="mt-4 text-green-600">Bienvenido, {user.displayName}!</p>
+	  {/if}
 	</div>
-</main>
-
+  </main>
+  
