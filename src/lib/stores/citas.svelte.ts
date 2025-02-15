@@ -36,8 +36,10 @@ export class citaStore {
 				const matchHora = normalizeString(cita.start_time)
 				.toLowerCase()
 				.includes(normalizeString(this.searchValue));
+				const matchServicio= normalizeString(cita.service.nombre.toString()).toLowerCase()
+				.includes(normalizeString(this.searchValue));
 
-				filtroBusqueda =  matchCliente || matchProfesional || matchFecha || matchHora;
+				filtroBusqueda =  matchCliente || matchProfesional || matchFecha || matchHora || matchServicio;
 			}
 
 			const matchFiltroEstado = citaCumpleFiltroEstado(cita, this.filters.estado);
