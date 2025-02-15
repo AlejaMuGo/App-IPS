@@ -53,6 +53,8 @@
 		"vitest": "^3.0.0"
 	},
 	"dependencies": {
+		"@auth/core": "^0.37.4",
+		"@auth/sveltekit": "^1.7.4",
 		"@supabase/supabase-js": "^2.48.1",
 		"@tanstack/table-core": "^8.20.5"
 	}
