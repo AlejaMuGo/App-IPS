@@ -54,16 +54,14 @@
         <!-- Contenedor de la vista diaria -->
         <div class="grid grid-cols-1 border-t border-gray-300">
             {#each hours as hour}
-                <div class="relative px-8  border-t border-gray-300 h-16 flex flex-row">
+                <div class="relative px-8  border-t border-gray-300 h-24 flex flex-row">
                     <span class="py-5 px-4 text-sm">{hour}</span>
                     
-                    <span class="py-5 px-4 text-base">
+                    <span class="flex gap-x-4 py-5 px-4 text-base">
                         {#each getCitasDelDiaYHora(hour) as cita}
                         <Dialog.Root>
-                            <Dialog.Trigger>
-                                <div class={`${cita.color} rounded `}>
+                            <Dialog.Trigger class={`${cita.color} rounded-md p-4  `}>
                                     {cita.title}
-                                </div>
                             </Dialog.Trigger>
                             <Dialog.Content>
                                 <Dialog.Header>
