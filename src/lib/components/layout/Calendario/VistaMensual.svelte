@@ -92,7 +92,7 @@
 			{#each daysArray as day}
             
 				<div
-					class="relative flex h-24 items-start justify-start space-x-2 overflow-y-auto overflow-x-hidden border-r border-t border-gray-300 p-2 {day
+					class="relative flex h-24 items-start justify-start space-x-2 border-r border-t border-gray-300 p-2 overflow-hidden {day
 						? ''
 						: 'bg-gray-100'}"
 				>
@@ -107,7 +107,7 @@
                             </span>
 						
 
-                        <ScrollArea>
+                        <ScrollArea class="h-[80px] w-[150px]">
                             <div class="flex w-full flex-col space-y-2">
                                 <!-- Mostrar las citas del día -->
                                 {#each getCitasDelDia(day) as cita}
@@ -154,12 +154,4 @@
 			{/each}
 		</div>
 	</div>
-    <ScrollArea class="h-[200px] w-[350px] rounded-md border p-4">
-        Jokester began sneaking into the castle in the middle of the night and
-        leaving jokes all over the place: under the king's pillow, in his soup, even
-        in the royal toilet. The king was furious, but he couldn't seem to stop
-        Jokester. And then, one day, the people of the kingdom discovered that the
-        jokes left by Jokester were so funny that they couldn't help but laugh. And
-        once they started laughing, they couldn't stop.
-      </ScrollArea>
 </main>
