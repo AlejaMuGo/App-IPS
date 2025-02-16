@@ -97,13 +97,15 @@
 						: 'bg-gray-100'}"
 				>
 					{#if day !== null}
-						<span
-							class="rounded-full text-sm font-semibold {day === today.getDate() &&
+                        <span
+							class="flex items-center justify-center text-center size-7 rounded-full text-sm font-semibold {day === today.getDate() &&
 							currentYear === today.getFullYear() &&
 							currentMonth === months[today.getMonth()]
 								? 'bg-indigo-200'
-								: ''}">{day}</span
-						>
+								: ''}">
+                                {day}
+                            </span>
+						
 
                         <ScrollArea>
                             <div class="flex w-full flex-col space-y-2">
